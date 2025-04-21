@@ -6,12 +6,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GenExel {
-    public File genExelFile(String symbol, String interval, LocalDateTime startTime, LocalDateTime endTime) {
+    public File genExelFile(String symbol, String interval, String startTime, String endTime) {
         File exel = new File(symbol + ".xlsx");
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet(symbol);

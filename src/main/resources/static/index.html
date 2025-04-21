@@ -1,50 +1,50 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Экспорт данных криптопар</title>
-    <link rel="stylesheet" href="/css/styles.css">
+  <meta charset="UTF-8">
+  <title>Экспорт данных криптопар</title>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 <div class="container">
-    <h1>Экспорт исторических данных</h1>
+  <h1>Экспорт исторических данных</h1>
 
-    <form id="exportForm">
-        <div class="form-container">
-            <input type="text" id="symbol" name="symbol" placeholder="Введите символ (например, BTCUSDT)" required>
-            <button type="button" id="checkSymbolButton">Проверить</button>
-        </div>
+  <form id="exportForm">
+    <div class="form-container">
+      <input type="text" id="symbol" name="symbol" placeholder="Введите символ (например, BTCUSDT)" required>
+      <button id="checkSymbolButton" type="button">Проверить символ</button>
+    </div>
 
-        <div class="form-group">
-            <label for="interval">Интервал:</label>
-            <select id="interval" required>
-                <option value="1">1 минута</option>
-                <option value="3">3 минуты</option>
-                <option value="5">5 минут</option>
-                <option value="15">15 минут</option>
-                <option value="30">30 минут</option>
-                <option value="60">1 час</option>
-                <option value="120">2 часа</option>
-                <option value="240">4 часа</option>
-                <option value="360">6 часов</option>
-                <option value="720">12 часов</option>
-            </select>
-        </div>
+    <div class="form-group">
+      <label for="interval">Интервал:</label>
+      <select id="interval" required>
+        <option value="1">1 минута</option>
+        <option value="3">3 минуты</option>
+        <option value="5">5 минут</option>
+        <option value="15">15 минут</option>
+        <option value="30">30 минут</option>
+        <option value="60">1 час</option>
+        <option value="120">2 часа</option>
+        <option value="240">4 часа</option>
+        <option value="360">6 часов</option>
+        <option value="720">12 часов</option>
+      </select>
+    </div>
 
-        <div class="form-group">
-            <label for="startTime">Начало периода:</label>
-            <input type="datetime-local" id="startTime" name="startTime" max="9999-12-31T23:59:59" step="1" required>
-        </div>
+    <div class="form-group">
+      <label for="startTime">Начало периода:</label>
+      <input type="datetime-local" id="startTime" name="startTime" max="9999-12-31T23:59:59" step="1" required>
+    </div>
 
-        <div class="form-group">
-            <label for="endTime">Конец периода:</label>
-            <input type="datetime-local" id="endTime" name="endTime" max="9999-12-31T23:59:59" step="1" required>
-        </div>
+    <div class="form-group">
+      <label for="endTime">Конец периода:</label>
+      <input type="datetime-local" id="endTime" name="endTime" max="9999-12-31T23:59:59" step="1" required>
+    </div>
 
-        <button type="submit">Сгенерировать отчёт</button>
-    </form>
+    <button id="generateReportButton" type="button">Сгенерировать файл</button>
+  </form>
 
-    <div id="status" class="status-message"></div>
+  <div id="status" class="status-message"></div>
 </div>
 
 <script src="/js/app.js"></script>

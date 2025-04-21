@@ -14,6 +14,7 @@ public class BybitInfoTaker {
         ArrayList<Double> close = new ArrayList<>();
         ArrayList<Double> max = new ArrayList<>();
         ArrayList<Double> min = new ArrayList<>();
+        System.out.println(symbol + " " + interval + " " + startTime + " " + endTime);
 
         RestTemplate restTemplate = new RestTemplate();
         Response response = restTemplate.getForObject("api-testnet.bybit.com/v5/market/kline?" +

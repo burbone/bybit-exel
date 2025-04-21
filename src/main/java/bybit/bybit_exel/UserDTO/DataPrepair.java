@@ -9,28 +9,26 @@ import java.util.ArrayList;
 
 @Data
 public class DataPrepair {
-    SavingData savingData;
     long start;
     long end;
 
-    public void startTimePre (LocalDateTime startTime) {
-        String start = startTime.toString();
+    public void startTimePre (String startTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime dateTime = LocalDateTime.parse(start, formatter);
+        LocalDateTime dateTime = LocalDateTime.parse(startTime, formatter);
         long startMill = dateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
         this.start = startMill;
     }
 
-    public void endTimePre (LocalDateTime endTime) {
-        String start = endTime.toString();
+    public void endTimePre (String endTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime dateTime = LocalDateTime.parse(start, formatter);
+        LocalDateTime dateTime = LocalDateTime.parse(endTime, formatter);
         long endMill = dateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
         this.end = endMill;
     }
 
     public long intervalToMill () {
         long inter = 0;
+        SavingData savingData = new SavingData();
         switch (savingData.getInterval()) {
             case "1" : inter = 60000;
             case "3" : inter = 3 * 60000;
@@ -47,7 +45,7 @@ public class DataPrepair {
         return inter;
     }
 
-    public ArrayList<Long> promTime (LocalDateTime startTime, LocalDateTime endTime) {
+    public ArrayList<Long> promTime (String startTime, String endTime) {
         long inter = intervalToMill();
         startTimePre(startTime);
         endTimePre(endTime);
