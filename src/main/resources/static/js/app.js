@@ -3,11 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkSymbolButton    = document.getElementById('checkSymbolButton');
     const generateReportButton = document.getElementById('generateReportButton');
     const statusDiv            = document.getElementById('status');
-  
-    // Гарантированно блокируем «нативный» сабмит формы
+
     form?.addEventListener('submit', e => e.preventDefault());
-  
-    // Проверка символа
+
     checkSymbolButton?.addEventListener('click', async e => {
       e.preventDefault();
       const symbol = document.getElementById('symbol').value.trim().toUpperCase();
@@ -26,8 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statusDiv.textContent = `Ошибка: ${err.message}`;
       }
     });
-  
-    // Генерация и скачивание отчёта
+
     generateReportButton?.addEventListener('click', async e => {
       e.preventDefault();
       statusDiv.className   = 'status-message processing';
@@ -51,8 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const err = await response.json();
           throw new Error(err.message || 'Ошибка сервера');
         }
-  
-        // Получаем имя файла из заголовка
+
         const cdHeader = response.headers.get('Content-Disposition') || '';
         let filename   = `crypto_${requestData.symbol}_${requestData.interval}.xlsx`;
         if (cdHeader.includes('filename=')) {
@@ -61,8 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/['"]/g, '')
             .trim();
         }
-  
-        // Скачиваем файл
+
         const blob = await response.blob();
         const url  = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -81,8 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-  
-  // Конвертер даты
+
   function convertDateTime(htmlDateTime) {
     if (!htmlDateTime) throw new Error('Дата не указана');
     const d = new Date(htmlDateTime);

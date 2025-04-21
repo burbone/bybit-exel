@@ -23,11 +23,12 @@ public class GenExel {
         BybitInfoTaker bybitInfoTaker = new BybitInfoTaker();
         DataPrepair dataPrepair = new DataPrepair();
 
-        ArrayList<Long> times = dataPrepair.promTime(startTime, endTime);
+        ArrayList<Long> times = dataPrepair.promTime(startTime, endTime, interval);
         int localRow = 1;
         for(int i = 1; i < times.size(); i++) {
             List<?>[] info = bybitInfoTaker.getInfo(symbol, interval, times.get(i-1), times.get(i));
             for(int j = 0; j < info[0].size(); j++) {
+                System.out.println(info.length + " " + info[0].size() + " " + info[0].get(j));
                 localRow++;
                 Row nextRow = sheet.createRow(localRow);
                 nextRow.createCell(0).setCellValue((String) info[0].get(j));

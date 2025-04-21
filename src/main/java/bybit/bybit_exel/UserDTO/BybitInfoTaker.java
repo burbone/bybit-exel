@@ -1,50 +1,73 @@
 package bybit.bybit_exel.UserDTO;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
-import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BybitInfoTaker {
     public List<?>[] getInfo (String symbol, String interval, long startTime, long endTime) {
-        List<?>[] info = new List<?>[5];
-        ArrayList<Long> times = new ArrayList<>();
-        ArrayList<Double> open = new ArrayList<>();
-        ArrayList<Double> close = new ArrayList<>();
-        ArrayList<Double> max = new ArrayList<>();
-        ArrayList<Double> min = new ArrayList<>();
+        ArrayList<String> times = new ArrayList<>();
+        ArrayList<String> open = new ArrayList<>();
+        ArrayList<String> close = new ArrayList<>();
+        ArrayList<String> max = new ArrayList<>();
+        ArrayList<String> min = new ArrayList<>();
         System.out.println(symbol + " " + interval + " " + startTime + " " + endTime);
+        String start = String.valueOf(startTime);
+        String end = String.valueOf(endTime);
+        try {
+            HttpClient client = HttpClient.newHttpClient();
 
-        RestTemplate restTemplate = new RestTemplate();
-        Response response = restTemplate.getForObject("api-testnet.bybit.com/v5/market/kline?" +
-                "category=spot" +
-                "&symbol=" + symbol +
-                "&interval=" + interval +
-                "&start=" + startTime +
-                "&end=" + endTime +
-                "&limit=1000", Response.class);
-        if (response != null && response.getResult() != null && response.getResult().getList() != null) {
-            for (List<String> candle : response.getResult().getList()) {
-                if (candle.size() >= 5) {
-                    times.add(Long.parseLong(candle.get(0)));
-                    open.add(Double.parseDouble(candle.get(1)));
-                    max.add(Double.parseDouble(candle.get(2)));
-                    min.add(Double.parseDouble(candle.get(3)));
-                    close.add(Double.parseDouble(candle.get(4)));
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("https://api-testnet.bybit.com/v5/market/kline" +
+                            "?category=spot" +
+                            "&symbol=" + symbol +
+                            "&interval=" + interval +
+                            "&start=" + start +
+                            "&end=" + end +
+                            "&limit=1000"
+                    ))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode rootNode = objectMapper.readTree(response.body());
+                JsonNode listNode = rootNode.path("result").path("list");
+                for (JsonNode candle : listNode) {
+                    times.add(String.valueOf(candle.get(0)));
+                    open.add(String.valueOf(candle.get(1).asDouble()));
+                    max.add(String.valueOf(candle.get(2).asDouble()));
+                    min.add(String.valueOf(candle.get(3).asDouble()));
+                    close.add(String.valueOf(candle.get(4).asDouble()));
                 }
             }
+        } catch (JsonMappingException e) {
+            System.out.println("1 error");
+            throw new RuntimeException(e);
+        } catch (URISyntaxException e) {
+            System.out.println("2 error");
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            System.out.println("3 error");
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            System.out.println("4 error");
+            throw new RuntimeException(e);
         }
-
-        info[0] = times; times.clear();
-        info[1] = open; open.clear();
-        info[2] = close; close.clear();
-        info[3] = max; max.clear();
-        info[4] = min; min.clear();
-
-        return info;
+        return new List<?>[]{ times, open, close, max, min };
     }
-    @Data
+        @Data
     class Response {
         private int retCode;
         private String retMsg;

@@ -15,45 +15,30 @@ public class DataPrepair {
     public void startTimePre (String startTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime dateTime = LocalDateTime.parse(startTime, formatter);
-        long startMill = dateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
-        this.start = startMill;
+        this.start = dateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
     }
 
     public void endTimePre (String endTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime dateTime = LocalDateTime.parse(endTime, formatter);
-        long endMill = dateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
-        this.end = endMill;
+        this.end = dateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
     }
 
-    public long intervalToMill () {
-        long inter = 0;
-        SavingData savingData = new SavingData();
-        switch (savingData.getInterval()) {
-            case "1" : inter = 60000;
-            case "3" : inter = 3 * 60000;
-            case "5" : inter = 5 * 60000;
-            case "15" : inter = 15 * 60000;
-            case "30" : inter = 30 * 60000;
-            case "60" : inter = 60 * 60000;
-            case "120" : inter = 120 * 60000;
-            case "240" : inter = 240 * 60000;
-            case "360" : inter = 360 * 60000;
-            case "720" : inter = 720 * 60000;
-            default: inter = 0;
-        }
-        return inter;
+    public long intervalToMill (String interval) {
+        return Integer.parseInt(interval) * 60000L;
     }
 
-    public ArrayList<Long> promTime (String startTime, String endTime) {
-        long inter = intervalToMill();
+    public ArrayList<Long> promTime (String startTime, String endTime, String interval) {
+        long inter = intervalToMill(interval);
         startTimePre(startTime);
         endTimePre(endTime);
+        System.out.println(start + " " + end + " " + inter);
         ArrayList<Long> prom = new ArrayList<>();
-        while (start <= end) {
+        while (start < end) {
             prom.add(start);
             start = start + (inter * 1000);
         }
+        prom.add(end);
         return prom;
     }
 }
