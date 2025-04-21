@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error('Ошибка проверки символа');
                 }
 
-                const textResponse = await response.text(); // Дождитесь завершения Promise
-                const isValid = textResponse.trim(); // Теперь можно вызвать trim()
+                const textResponse = await response.text();
+                const isValid = textResponse.trim();
 
                 if (isValid === 'true') {
                     statusDiv.className = 'status-message success';
@@ -66,15 +66,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(error.message || 'Ошибка сервера');
                 }
 
-                // Скачивание файла
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = `crypto_${requestData.symbol}_${requestData.interval}.xlsx`;
+
+                if (contentDisposition && contentDisposition.includes('filename=')) {
+                    filename = contentDisposition
+                        .split('filename=')[1]
+                        .replace(/['"]/g, '')
+                        .trim();
+                }
+
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `crypto_${requestData.symbol}_${requestData.interval}.xlsx`;
+                link.download = filename;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
 
                 statusDiv.className = 'status-message success';
                 statusDiv.textContent = 'Файл успешно сгенерирован!';
@@ -89,7 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Преобразование даты из формата HTML в timestamp
 function convertDateTime(htmlDateTime) {
     if (!htmlDateTime) {
         throw new Error('Дата не указана');
@@ -101,7 +110,6 @@ function convertDateTime(htmlDateTime) {
         throw new Error('Некорректный формат даты');
     }
 
-    // Форматируем дату строго в формат YYYY-MM-DD HH:MM:SS
     const yyyy = date.getFullYear();
     const mm = String(date.getMonth() + 1).padStart(2, '0');
     const dd = String(date.getDate()).padStart(2, '0');

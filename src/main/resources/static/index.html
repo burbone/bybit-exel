@@ -10,13 +10,11 @@
     <h1>Экспорт исторических данных</h1>
 
     <form id="exportForm">
-        <!-- Поле ввода пары -->
         <div class="form-container">
             <input type="text" id="symbol" name="symbol" placeholder="Введите символ (например, BTCUSDT)" required>
             <button type="button" id="checkSymbolButton">Проверить</button>
         </div>
 
-        <!-- Выбор интервала -->
         <div class="form-group">
             <label for="interval">Интервал:</label>
             <select id="interval" required>
@@ -30,19 +28,14 @@
                 <option value="240">4 часа</option>
                 <option value="360">6 часов</option>
                 <option value="720">12 часов</option>
-                <option value="D">1 день</option>
-                <option value="W">1 неделя</option>
-                <option value="M">1 месяц</option>
             </select>
         </div>
 
-        <!-- Дата начала -->
         <div class="form-group">
             <label for="startTime">Начало периода:</label>
             <input type="datetime-local" id="startTime" name="startTime" max="9999-12-31T23:59:59" step="1" required>
         </div>
 
-        <!-- Дата окончания -->
         <div class="form-group">
             <label for="endTime">Конец периода:</label>
             <input type="datetime-local" id="endTime" name="endTime" max="9999-12-31T23:59:59" step="1" required>
