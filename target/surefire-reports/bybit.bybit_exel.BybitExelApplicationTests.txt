@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: bybit.bybit_exel.BybitExelApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.259 s -- in bybit.bybit_exel.BybitExelApplicationTests
